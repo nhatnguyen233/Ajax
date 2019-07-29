@@ -3,18 +3,23 @@
 @section('content')
 
 
-  <div class="container" style="margin-top:20px">
+  <div class="container" style="margin-top:20px; margin-left:-15px;">
     <div class="panel panel-primary">
       <div class="panel-heading" style="height: 45px;">
         <h3 class="panel-title" style="position: relative;padding-top: 5px; font-size:30px;">Danh Sách Sản Phẩm</h3>
       </div>
+      <form action="{{ route('sanpham.timkiem') }}" method="post" class="navbar-form navbar-left" role="search">
+        <input type="hidden" name="_token" value="{{ csrf_token() }}";>
+          <div class="form-group">
+            <input type="text" name="keyword" class="form-control timkiem" placeholder="Tìm kiếm">
+          </div>
+          <button type="submit" class="btn btn-default">Tìm</button>
+      </form>
       <div class="panel-body">
         <table class="table table-bordered" id="postTable">
           <a type="submit" id="add" class="btn btn-success add"><span id="" class='glyphicon glyphicon-check'></span> Thêm sản phẩm</a>
           <thead>
-{{--          {{ var_dump($sanpham->producttype->id) }}--}}
             <tr>
-              <!-- <th>STT</th> -->
               <th>Tên sản phẩm</th>
               <!-- <th>Ảnh</th> -->
               <th>Loại sản phẩm</th>
@@ -39,11 +44,14 @@
 
               <td>
                   <!-- <button data-id="{{ $sp->id }}" data-title="{{ $sp->name }}" id="show" class="btn btn-success"><span>Xem</button> -->
-                  <button data-id="{{ $sp->id }}" data-title="{{ $sp->name }}" id="edit" class="btn btn-primary"><span class="glyphicon glyphicon-edit"> Sửa </button>
-                  <button data-id="{{ $sp->id }}" data-title="{{ $sp->name }}" class="btn btn-danger delete"><span class="glyphicon glyphicon-trash"> Xóa </button>
+                  <button data-id="{{ $sp->id }}" data-name="{{ $sp->name }}" data-tomtat="{{ $sp->tomtat }}" data-danhgia="{{ $sp->danhgia }}" data-gia="{{ $sp->gia }}" id="edit" class="btn btn-primary"><span class="glyphicon glyphicon-edit"> Sửa </button>
+                  <button data-id="{{ $sp->id }}" data-name="{{ $sp->name }}" class="btn btn-danger delete"><span class="glyphicon glyphicon-trash"> Xóa </button>
               </td>
             </tr>
             @endforeach
+            <div style="text-align:center">
+{{--                {{ $sanpham->links() }}--}}
+            </div>
           </tbody>
         </table>
       </div>
@@ -61,7 +69,7 @@
                 <div class="form-group">
                     <label class="control-label col-sm-2" for="name">Tên:</label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control" name="name" id="name_add" value="{{ old('name') }}">
+                        <input type="text" class="form-control" name="name" id="name_add">
                         <p class="errorName text-center alert alert-danger hidden"></p>
                     </div>
                 </div>
@@ -138,7 +146,7 @@
                 <div class="form-group">
                     <label class="control-label col-sm-2" for="name">Tên:</label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control" name="name" id="name_edit" value="{{ old('name') }}">
+                        <input type="text" class="form-control" name="name" id="name_edit">
                         <p class="errorName text-center alert alert-danger hidden"></p>
                     </div>
                 </div>

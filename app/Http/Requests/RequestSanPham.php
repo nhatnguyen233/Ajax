@@ -30,4 +30,17 @@ class RequestSanPham extends FormRequest
             'danhgia' => 'required|min:1|max:2'
         ];
     }
+
+    public function messages(){
+        return [
+            'name.required'     => 'Tên sản phẩm không được để trống',
+            'name.min'          => 'Tên sản phẩm cần ít nhất 2 kí tự',
+            'name.max'          => 'Tên sản phẩm không được quá 32 kí tự',
+            'tomtat.required'   => 'Tóm tắt không được để trống',
+            'tomtat.min'        => 'Tóm tắt cần ít nhất 2 kí tự',
+            'tomtat.max'        => 'Tóm tắt không được quá 500 kí tự',
+            '.danhgiarequired'     => 'Đánh giá không được để trống',
+            'danhgia.max'       => 'Đánh giá tối đa 100 điểm'
+        ];
+    }
 }

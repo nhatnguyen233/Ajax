@@ -21,6 +21,13 @@ class SanPhamController extends Controller
             'danhgia' => 'required|min:1|max:2'
         ];
 
+    protected $sanpham;
+
+    public function __construct(SanPham $sanpham)
+    {
+        $this->sanpham = $sanpham;
+    }
+
     public function index()
     {
         $sanpham = SanPham::all();
@@ -35,21 +42,13 @@ class SanPhamController extends Controller
 
     public function store(Request $request)
     {
-        // echo $rules;
-
         $validator = Validator::make($request->all(),$this->rules);
         if($validator->fails()){
             return Response::json(array('errors' => $validator->getMessageBag()->toArray()));
         }else{
-            $sanpham = new SanPham;
-            $sanpham->name    = $request->name;
-            $sanpham->tomtat  = $request->tomtat;
-            $sanpham->danhgia = $request->danhgia;
-            $sanpham->gia     = $request->gia;
-            $sanpham->id_type = $request->id_type;
 
-            $sanpham->save();
-            $type = ProductType::all();
+            $sanpham = $this->sanpham->add($request->all());
+            $type = ProductType::find($sanpham->id_type);
 
             return response()-> json(['sanpham'=>$sanpham, 'type'=>$type]);
         }
@@ -58,7 +57,6 @@ class SanPhamController extends Controller
     public function show($id)
     {
         $post = SanPham::findOrFail($id);
-
         return view('sanpham.show', ['sanpham' => $post]);
     }
 
@@ -73,27 +71,14 @@ class SanPhamController extends Controller
         if ($validator->fails()) {
             return Response::json(array('errors' => $validator->getMessageBag()->toArray()));
         } else {
-            $post = SanPham::findOrFail($id);
-
-            $post->name     = $request->name;
-            $post->tomtat   = $request->tomtat;
-            $post->id_type  = $request->id_type;
-            $post->danhgia  = $request->danhgia;
-            $post->gia      = $request->gia;
-
-
-            $post->save();
-
-//            $sanpham = SanPham::all();
-            $type    = ProductType::find($post->id_type);
-
-            if($post->id_type == $type->id){
-                return response()->json(['sanpham'=>$post, 'type'=>$type]);
+            $this->sanpham->updateSanPham($request->all(), $id);
+            $product = SanPham::findOrFail($id);
+            $type    = ProductType::find($product->id_type);
+            if($product->id_type == $type->id){
+                return response()->json(['sanpham'=>$product, 'type'=>$type]);
             }
-
-
-//            return response()->json(['sanpham'=>$post, 'type'=>$type]);
         }
+
     }
 
     public function destroy($id)
@@ -103,16 +88,23 @@ class SanPhamController extends Controller
         return response()->json($sanpham);
     }
 
-    public function changeStatus()
-    {
-        // $id = Input::get('id');
+    public function timkiem(Request $request){
+//        $keyword = $request->keyword;
+//
+//        $sanpham = SanPham::where('name', 'like', '%' . $keyword . '%')->paginate(5);
+        $producttype = ProductType::all();
+//
+//        return view('admincp.timkiem.search', ['sanpham'=>$sanpham, 'producttype'=>$producttype]);
 
-        // $post = Post::findOrFail($id);
-        // $post->is_published = !$post->is_published;
-        // $post->save();
+        $keyword = $request->keyword;
 
-        // return response()->json($post);
+        $list = SanPham::select('sanpham.*')->join('producttype', 'sanpham.id_type', '=' , 'producttype.id')
+            ->where('producttype.loaisanpham', 'like', '%'. $keyword . '%')
+            ->orwhere('sanpham.name', 'like', '%'. $keyword . '%')->get();
+
+        return view('admincp.timkiem.search', ['sanpham'=>$list, 'producttype'=>$producttype]);
     }
+
 }
 
 

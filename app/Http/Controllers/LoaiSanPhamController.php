@@ -123,6 +123,6 @@ class LoaiSanPhamController extends Controller
     {
         $delete = ProductType::findOrFail($id);
         $delete->delete();
-        return response()->json(['success'=>'Xóa thành công']);
+        return response()->json($delete);
     }
 }

@@ -23,9 +23,6 @@ $(document).ready(function(){
                 'gia'     : $('#gia_add').val()
             },
             success:function(data){
-                // alert(data.id);
-                // console.log(data.type[(data.sanpham.id_type-1)].loaisanpham);
-                // console.log(data.sanpham.loaisanpham);
                 $('.errorName').addClass('hidden');
                 $('.errorDanhgia').addClass('hidden');
                 $('.errorGia').addClass('hidden');
@@ -51,12 +48,10 @@ $(document).ready(function(){
                         $('.errorGia').text(data.errors.gia);
                     }
                 }else{
-
                     toastr.success('Successfully added Post!', 'Success Alert', {timeOut: 5000});
-                    // $('#postTable').append("<tr class='item" + data.id + "'>" + "<td>" + data.name + "</td><td>" + data.danhgia + "</td><td>" + data.gia + "</td><td><button data-id='" + data.id + "' data-title='" + data.name "' id='show' class='btn btn-success'>Xem</button><button data-id='" + data.id + "' data-title='" + data.name + "' id='edit' class='btn btn-primary'>Sửa</button><button data-id='" + data.id "' data-title='" + data.name + "' id='delete' class='btn btn-danger'>Xóa</button></td></tr>");
-                    // $('#postTable').append("<tr class='item" + data.id + "'>" + "<td>" + data.name + "</td><td>" + data.tomtat + "</td><td>" + data.danhgia + "</td><td>" + data.gia + " VNĐ</td><td><button data-id='" + data.id + "' data-title='" + data.name + "' id='edit' " + " class='btn btn-primary'><span class='glyphicon glyphicon-edit'> Sửa </button><button data-id='" + data.id + "' data-title='" + data.name + "' class='btn btn-danger delete'><span class='glyphicon glyphicon-trash'> Xóa </button></td></tr>");
-
-                    $('#postTable').append("<tr class='item" + data.sanpham.id + "'>" + "<td>" + data.sanpham.name + "</td><td>" + data.type[(data.sanpham.id_type-1)].loaisanpham + "</td><td>" + data.sanpham.tomtat + "</td><td>" + data.sanpham.danhgia + "</td><td>" + data.sanpham.gia + " VNĐ</td><td><button data-id='" + data.sanpham.id + "' data-title='" + data.sanpham.name + "' id='edit' " + " class='btn btn-primary'><span class='glyphicon glyphicon-edit'> Sửa </button><button data-id='" + data.sanpham.id + "' data-title='" + data.sanpham.name + "' class='btn btn-danger delete'><span class='glyphicon glyphicon-trash'> Xóa </button></td></tr>");
+                    if(data.sanpham.id_type == data.type.id){
+                        $('#postTable').append("<tr class='item" + data.sanpham.id + "'>" + "<td>" + data.sanpham.name + "</td><td>" + data.type.loaisanpham + "</td><td>" + data.sanpham.tomtat + "</td><td>" + data.sanpham.danhgia + "</td><td>" + data.sanpham.gia + " VNĐ</td><td><button data-id='" + data.sanpham.id + "' data-name='" + data.sanpham.name + "' data-tomtat='" + data.sanpham.tomtat + "' data-danhgia='" + data.sanpham.danhgia + "' data-gia='" + data.sanpham.gia + "' id='edit' " + " class='btn btn-primary'><span class='glyphicon glyphicon-edit'> Sửa </button><button data-id='" + data.sanpham.id + "' data-title='" + data.sanpham.name + "' class='btn btn-danger delete'><span class='glyphicon glyphicon-trash'> Xóa </button></td></tr>");
+                    }
 
                 }
             }
@@ -66,10 +61,12 @@ $(document).ready(function(){
     //Modal Edit
 
     $(document).on('click', '#edit', function() {
-        // $('.modal-title').text('Add');
+        $('#name_edit').val($(this).data('name'));
+        $('#tomtat_edit').val($(this).data('tomtat'));
+        $('#danhgia_edit').val($(this).data('danhgia'));
+        $('#gia_edit').val($(this).data('gia'));
         $('#editModal').modal('show');
         id = $(this).data('id');
-        // alert(id);
     });
     $('.modal-footer').on('click', '.edit', function() {
         $.ajaxSetup({
@@ -78,7 +75,6 @@ $(document).ready(function(){
             }
         });
 
-        // id = $(this).data('id');
         $.ajax({
             url:  'admincp/sanpham/'+id ,
             type: 'PUT',
@@ -91,9 +87,6 @@ $(document).ready(function(){
                 'gia'     : $('#gia_edit').val()
             },
             success:function(data){
-                // alert(data.id);
-                // console.log(data.type[(data.sanpham.id_type-1)].loaisanpham);
-                // console.log(data);
                 $('.errorName').addClass('hidden');
                 $('.errorDanhgia').addClass('hidden');
                 $('.errorGia').addClass('hidden');
@@ -121,38 +114,32 @@ $(document).ready(function(){
                 }else{
                     toastr.success('Successfully edited Product!', 'Success Alert', {timeOut: 5000});
                     if(data.sanpham.id_type == data.type.id){
-                        $('.item' + data.sanpham.id).replaceWith("<tr class='item" + data.sanpham.id + "'>" + "<td>" + data.sanpham.name + "</td><td>" + data.type.loaisanpham + "</td><td>" + data.sanpham.tomtat + "</td><td>" + data.sanpham.danhgia + "</td><td>" + data.sanpham.gia + " VNĐ</td><td><button data-id='" + data.sanpham.id + "' data-title='" + data.sanpham.name + "' id='edit' " + " class='btn btn-primary'><span class='glyphicon glyphicon-edit'> Sửa </button><button data-id='" + data.sanpham.id + "' data-title='" + data.sanpham.name + "' class='btn btn-danger delete'><span class='glyphicon glyphicon-trash'> Xóa </button></td></tr>");
+                        $('.item' + data.sanpham.id).replaceWith("<tr class='item" + data.sanpham.id + "'>" + "<td>" + data.sanpham.name + "</td><td>" + data.type.loaisanpham + "</td><td>" + data.sanpham.tomtat + "</td><td>" + data.sanpham.danhgia + "</td><td>" + data.sanpham.gia + " VNĐ</td><td><button data-id='" + data.sanpham.id + "' data-name='" + data.sanpham.name + "' data-tomtat='" + data.sanpham.tomtat + "' data-danhgia='" + data.sanpham.danhgia + "' data-gia='" + data.sanpham.gia + "' id='edit' " + " class='btn btn-primary'><span class='glyphicon glyphicon-edit'> Sửa </button><button data-id='" + data.sanpham.id + "' data-title='" + data.sanpham.name + "' class='btn btn-danger delete'><span class='glyphicon glyphicon-trash'> Xóa </button></td></tr>");
                     }else{
                         alert('Error');
                     }
-                    // $('.item' + data.id).replaceWith("<tr class='item" + data.id + "'>" + "<td>" + data.name + "</td><td>" + data.tomtat + "</td><td>" + data.danhgia + "</td><td>" + data.gia + "</td><td><button data-id='" + data.id + "' data-title='" + data.name + "' id='edit' " + " class='btn btn-primary'><span class='glyphicon glyphicon-edit'> Sửa </button><button data-id='" + data.id + "' data-title='" + data.name + "' id='delete' " + " class='btn btn-danger'><span class='glyphicon glyphicon-trash'> Xóa </button></td></tr>");
-                    // $('#postTable').append("<tr class='item" + data.id + "'>" + "<td>" + data.name + "</td><td>" + data.danhgia + "</td><td>" + data.gia + "</td><td><button data-id='" + data.id + "' data-title='" + data.name "' id='show' class='btn btn-success'>Xem</button><button data-id='" + data.id + "' data-title='" + data.name + "' id='edit' class='btn btn-primary'>Sửa</button><button data-id='" + data.id "' data-title='" + data.name + "' id='delete' class='btn btn-danger'>Xóa</button></td></tr>");
-                    // $('#postTable').append("<tr class='item" + data.id + "'>" + "<td>" + data.name + "</td><td>" + data.tomtat + "</td><td>" + data.danhgia + "</td><td>" + data.gia + "</td><td><button data-id='" + data.id + "' data-title='" + data.name + "' id='show' " + " class='btn btn-success'>Xem</button><button data-id='" + data.id + "' data-title='" + data.name + "' id='edit' " + " class='btn btn-primary'>Sửa</button><button data-id='" + data.id + "' data-title='" + data.name + "' id='delete' " + " class='btn btn-danger'>Xóa</button></td></tr>");
                 }
             }
         });
     });
 });
 
-
 //Delete product
 
+var id = 0;
 
 $(document).on('click', '.delete', function() {
     // $('.modal-title').text('Add');
     $('#deleteModal').modal('show');
+    id = $(this).data('id');
 });
-// alert(id);
-id = $(this).data('id');
-//   alert(id);
-// $('.modal-footer').on('click', '.xoa', function() {
+
 $('.xoa').click(function(){
     $.ajaxSetup({
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
     });
-    id = $('.delete').data('id');
     $.ajax({
         type: 'DELETE',
         url: 'admincp/sanpham/' + id,
@@ -165,3 +152,10 @@ $('.xoa').click(function(){
         }
     });
 });
+
+//Tim kiem
+
+
+
+
+

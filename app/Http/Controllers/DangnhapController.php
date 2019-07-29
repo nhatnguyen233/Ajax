@@ -10,46 +10,14 @@ use Illuminate\Support\MessageBag;
 
 class DangnhapController extends Controller
 {
-    // protected $rules =
-    // [
-    //     'email'     => 'required|email',
-    //     'pass'  => 'required|min:2|max:32'
-    // ];
-    
-    // protected $messages = [
-    //     'email.required'    => 'Bạn chưa nhập email',
-    //     'email.email'       => 'Email không phù hợp',
-    //     'pass.required'     => 'Bạn chưa nhập mật khẩu',
-    //     'pass.min'          => 'Mật khẩu ít nhất 2 kí tự',
-    //     'pass.max'          => 'Mật khẩu tối đa 32 kí tự'
-    // ] ;
+
 
     public function getDangnhapAdmin(){
-        
+
         return view('admincp.login');
     }
 
     public function postDangnhapAdmin(Request $request){
-        
-        // $this->validate($request,
-        // [
-        //     'email'     => 'required|email',
-        //     'pass'  => 'required|min:2|max:32'
-        // ],
-        // [
-        //     'email.required'    => 'Bạn chưa nhập email',
-        //     'email.email'       => 'Email không phù hợp',
-        //     'pass.password' => 'Bạn chưa nhập mật khẩu',
-        //     'pass.min'      => 'Mật khẩu ít nhất 2 kí tự',
-        //     'pass.max'      => 'Mật khẩu tối đa 32 kí tự'
-        // ]);
-
-        // $admin = new User;
-        // var_dump($admin->password); die;
-        // if($request->email == $admin->email && $request->pass == $admin->password ){
-        //     return redirect()->route('sanpham.index');
-        // }
-        
         $rules   = [
             'email'     => 'required|email',
             'pass'  => 'required|min:2|max:32'
@@ -80,26 +48,13 @@ class DangnhapController extends Controller
     		}
     	}
 
-        // if(Auth::attempt(['email'=> $request->email, 'password' => $request->pass])){
-        //     // var_dump($request->pass); die;
-        //     return redirect()->route('sanpham.index');
-        // }
-        // else{
-        //     return redirect('admin/dangnhap');
-        // }
-
     }
 
     public function logout(){
         return redirect('admin/dangnhap')->with(Auth::logout());
         // Auth::logout();
-        // return redirect('admin/dangnhap'); 
+        // return redirect('admin/dangnhap');
     }
 }
 
 
-// $admin = new User;
-//     var_dump($admin->password); die;
-//     if($request->email == $admin->email && $request->pass == $admin->password ){
-//         return redirect()->route('sanpham.index');
-//     }

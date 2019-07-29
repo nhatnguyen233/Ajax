@@ -11,7 +11,11 @@ class SanPham extends Model
 
     protected $fillable = ['name', 'tomtat','danhgia', 'gia', 'id_type'];
 
-    public function showLaptop()
+    public function producttype(){
+        return $this->belongsTo('App\ProductType','id_type', 'id');
+    }
+
+    public function showSanPham()
     {
         $sanpham = SanPham::all();
         // dd($laptop);
@@ -20,11 +24,26 @@ class SanPham extends Model
 
     public function add($input)
     {
-        return $sanpham = SanPham::create($input);
+        return SanPham::create($input);
     }
 
-    public function producttype(){
-        return $this->belongsTo('App\ProductType','id_type', 'id');
+    public function findId($id){
+        $sanpham = SanPham::findOrFail($id);
+        return $sanpham;
     }
 
+    public function updateSanPham($input, $id){
+        $request = new SanPham();
+        $sanpham = $this->findId($id);
+        if($sanpham){
+            return $sanpham->update($input);
+        }
+    }
+
+    public function deleteSanPham($id){
+        $sanpham = $this->findId($id);
+        if(sanpham){
+            return $sanpham->delete();
+        }
+    }
 }
